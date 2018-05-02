@@ -20,7 +20,7 @@ int main(void) {
 	int i;
 	ENTRY * file;
 	int num;
-	int r;
+	int r=2;
 
 	for (;;) {
 
@@ -289,6 +289,7 @@ void readFile(ENTRY * file, void * data) {
 
 		for (i = 0; i < parameter.sector_per_cluster; i++) {
 			readSector(parameter.file_start + (parameter.sector_per_cluster * (cluster - 2)) + i, (unsigned char *) buf);
+			printSector(buf);
 			/* 마지막 Cluster일 경우에는 남은 공간 모두를 읽어 온다. */
 			if (sector_idx == sector_number) {
 				for (j = 0; j < remaining_sector_size; j++) {
@@ -305,4 +306,6 @@ void readFile(ENTRY * file, void * data) {
 			sector_idx = sector_idx + 1;
 		}
 	}
+
+	printf("[DEBUG] readFile()\n");
 }
