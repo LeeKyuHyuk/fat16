@@ -42,6 +42,39 @@ typedef struct {
 	unsigned short fat16_size; // FAT영역의 Sector수
 } BR;
 
+/* 시간 포맷을 위한 비트필드 구조체 선언 */
+typedef struct {
+	unsigned short sec :5;
+	unsigned short min :6;
+	unsigned short hour :5;
+} TIME;
+
+/* 날짜 포맷을 위한 비트필드 구조체 선언 */
+typedef struct {
+	unsigned short day :5;
+	unsigned short month :4;
+	unsigned short year :7;
+} DATE;
+
+/* 하나의 32B Entry 분석을 위한 구조체 => 아래 구조체는 이름을 바꾸지 말고 내용만 채워서 사용할 것 */
+
+typedef struct {
+	/* Entry의 각 멤버를 설계한다 */
+	unsigned char name[11];
+	unsigned char attribute;
+	unsigned char reserved;
+	unsigned char creation_time_tenth;
+	unsigned short creation_time;
+	unsigned short creation_date;
+	unsigned short last_access_date;
+	unsigned short first_cluster_high;
+	unsigned short lash_write_time;
+	unsigned short last_write_date;
+	unsigned short first_cluster_low;
+	unsigned int file_size;
+
+} ENTRY;
+
 #pragma pack(pop)
 
 /* MBR, BR 분석을 통하여 획득하여 저장해야 하는 정보들 */
@@ -54,6 +87,8 @@ static struct _parameter {
 	unsigned int root_start;
 	unsigned int file_start;
 } parameter;
+
+#define FAT_NUM_PER_SECTOR	(parameter.byte_per_sector/2)
 
 /* 하부 설계되는 함수 목록 */
 int readSector(int sector, void *buf);
