@@ -276,6 +276,19 @@ void readFile(ENTRY * file, void * data) {
 		sector_number = sector_number + 1;
 	}
 
+	printf("[DEBUG] File Info\n");
+	printf("file->name : %s\n", file->name);
+	printf("file->attribute : %X\n", file->attribute);
+	printf("file->creation_time_tenth : %X\n", file->creation_time_tenth);
+	printf("file->creation_time : %d\n", file->creation_time);
+	printf("file->creation_date : %d\n", file->creation_date);
+	printf("file->last_access_date : %d\n", file->last_access_date);
+	printf("file->first_cluster_high : %d\n", file->first_cluster_high);
+	printf("file->lash_write_time : %d\n", file->lash_write_time);
+	printf("file->last_write_date : %d\n", file->last_write_date);
+	printf("file->first_cluster_low : %d\n", file->first_cluster_low);
+	printf("file->file_size : %d\n", file->file_size);
+
 	int i, j;
 	int sector_idx=0, data_idx = 0;
 	while ( cluster != 0xFFFF ) {
