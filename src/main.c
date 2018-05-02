@@ -65,13 +65,15 @@ int main(void) {
 
 			/* malloc으로 읽어올 파일 크기만큼 할당 받음 단, 512바이트의 배수로 받아야 함, 할당 결과가 NULL 포인터이면 다시 파일 리스팅 */
 			/* 만약 필요한 크기가 520 바이트라면 필요한 520바이트를 초과하는 512바이트의 배수 즉, 1024 바이트를 받아야 한다	*/
-			data = (char *) malloc((file->file_size / sizeof(char))+1);
+			data = (char *) calloc(1, (file->file_size / sizeof(char)) + 1);
+			printf("[DEBUG] malloc size = %d\n", (file->file_size / sizeof(char)) + 1);
 
 			/* file의 크기를 num 변수에 저장, 추후 C, TXT 파일의 내용을 인쇄하기 위한 용도로 사용 */
 			num = file->file_size;
 
 			/* 파일 데이터 읽기 */
 			readFile(file, data);
+			printf("\n");
 
 			switch(r)
 			{
@@ -276,7 +278,6 @@ void readFile(ENTRY * file, void * data) {
 
 	int i, j;
 	int sector_idx=0, data_idx = 0;
-	printf("[DEBUG] readFile()\n");
 	while ( cluster != 0xFFFF ) {
 		/* next_cluster를 갱신 */
 		if (next_cluster != 0xFFFF)	{
@@ -289,23 +290,22 @@ void readFile(ENTRY * file, void * data) {
 
 		for (i = 0; i < parameter.sector_per_cluster; i++) {
 			readSector(parameter.file_start + (parameter.sector_per_cluster * (cluster - 2)) + i, (unsigned char *) buf);
-			printSector(buf);
 			/* 마지막 Cluster일 경우에는 남은 공간 모두를 읽어 온다. */
 			if (sector_idx == sector_number) {
 				for (j = 0; j < remaining_sector_size; j++) {
-					((unsigned char*) data)[data_idx++] = buf[j];
+//					((unsigned char*) data)[data_idx++] = buf[j];
+					printf("%c", buf[j]);
 				}
 				return;
 			}
 
 			else {
 				for (j = 0; j < parameter.byte_per_sector; j++) {
-					((unsigned char*) data)[data_idx++] = buf[j];
+//					((unsigned char*) data)[data_idx++] = buf[j];
+					printf("%c", buf[j]);
 				}
 			}
 			sector_idx = sector_idx + 1;
 		}
 	}
-
-	printf("[DEBUG] readFile()\n");
 }
